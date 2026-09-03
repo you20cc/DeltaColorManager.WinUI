@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>DeltaColorManager</RootNamespace>
+    <AssemblyName>DeltaColorManager</AssemblyName>
+    <Version>2.0.0</Version>
+    <Product>三角洲一键颜色管理</Product>
+    <Company>DeltaColor</Company>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <Platforms>x86;x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- CsWinRT 生成代码需要 unsafe -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <!-- WinUI 3:非打包模式 + 自包含(抄 ALH-Pro,发给别人双击即跑) -->
+    <UseWinUI>true</UseWinUI>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <WindowsSdkPackageVersion>10.0.19041.38</WindowsSdkPackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260804001" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
+  </ItemGroup>
+
+  <!-- ===== VC++ 运行库(自包含部署必须手动带上,抄 ALH-Pro)=====
+       缺 msvcp140.dll 的干净电脑启动即闪退;微软许可允许再分发。
+       vcruntime140_threads.dll 必须带(新版组件依赖 __std_parallel_algorithms_hw_threads)。
+       不带 d3dcompiler_47.dll:系统自带,带旧版反而会覆盖系统新版引发"无法定位程序输入点"。 -->
+  <ItemGroup>
+    <None Include="assets\runtime\msvcp140.dll" Link="msvcp140.dll" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="assets\runtime\vcruntime140.dll" Link="vcruntime140.dll" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="assets\runtime\vcruntime140_1.dll" Link="vcruntime140_1.dll" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="assets\runtime\vcruntime140_threads.dll" Link="vcruntime140_threads.dll" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,36 @@
+# ===== 编译产物 =====
+[Bb]in/
+[Oo]bj/
+
+# ===== Visual Studio / VS Code =====
+.vs/
+.vscode/
+*.user
+*.suo
+*.userprefs
+*.cache
+
+# ===== Rider / ReSharper =====
+.idea/
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# ===== .NET =====
+*.lock.json
+*.nuget.props
+*.nuget.targets
+project.lock.json
+artifacts/
+
+# ===== 日志 / 崩溃文件(运行时生成,不入库) =====
+*.log
+
+# ===== 系统垃圾 =====
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# ===== 截图目录保留(发布前放截图) =====
+!assets/
