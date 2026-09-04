@@ -271,10 +271,10 @@ internal static class Native
     }
 
     /// <summary>
-    /// 构造「DCM Default.icm」的字节：最小合法 ICC v2.1 matrix-shaper 显示器 profile。
-    /// - 基色/TRC 用 sRGB 标准值（D50-adapted 基色 + gamma 2.2）
-    /// - 白点 D65，PCS 照明 D50
-    /// - vcgt 为 identity 表（3×256，值 = i*257）→ 开机加载时显卡 LUT 回到纯线性
+    /// 构造「DCM Default.icm」的字节：真·identity ICC v2.1 profile(对 WCS 与 GPU LUT 都是 no-op)。
+    /// - TRC = gamma 1.0(线性) + 单位矩阵 → WCS 不做曲线变换(否则现代应用 Direct2D/Chromium 主画布会被压黑)
+    /// - vcgt = identity 表(3×256,值 = i*257) → 显卡 LUT 回到纯线性
+    /// - 不要写 sRGB 风格的 gamma 2.2 + sRGB 基色:显示器本身已是 sRGB,再套一份 sRGB profile 会 double-gamma
     /// </summary>
     private static byte[] BuildDefaultIccBytes()
     {
@@ -347,18 +347,18 @@ internal static class Native
             return b.ToArray();
         }
 
-        // sRGB 标准：D65 白点 + D50-adapted 基色 + gamma 2.2
+        // 单位矩阵 + gamma 1.0 = 完整 identity 转换(WCS 不会引入任何颜色变换)
         var tagList = new List<(string sig, byte[] data)>
         {
             ("desc", DescTag("DCM Default")),
-            ("wtpt", XYZTag(0.9505, 1.0000, 1.0891)),      // D65
-            ("rXYZ", XYZTag(0.4360, 0.2225, 0.0139)),
-            ("gXYZ", XYZTag(0.3851, 0.7168, 0.0971)),
-            ("bXYZ", XYZTag(0.1431, 0.0606, 0.7141)),
-            ("rTRC", CurveTag(2.2)),
-            ("gTRC", CurveTag(2.2)),
-            ("bTRC", CurveTag(2.2)),
-            ("cprt", TextTag("DeltaColorManager default profile")),
+            ("wtpt", XYZTag(0.9642, 1.0000, 0.8249)),      // D50
+            ("rXYZ", XYZTag(1.0, 0.0, 0.0)),                // 单位矩阵 R
+            ("gXYZ", XYZTag(0.0, 1.0, 0.0)),                // 单位矩阵 G
+            ("bXYZ", XYZTag(0.0, 0.0, 1.0)),                // 单位矩阵 B
+            ("rTRC", CurveTag(1.0)),
+            ("gTRC", CurveTag(1.0)),
+            ("bTRC", CurveTag(1.0)),
+            ("cprt", TextTag("DeltaColorManager default identity profile")),
             ("vcgt", VcgtIdentityTag()),
         };
 
