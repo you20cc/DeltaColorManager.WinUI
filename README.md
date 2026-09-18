@@ -40,7 +40,7 @@ v2.0 使用 **WinUI 3 (Windows App SDK 1.8)** 全面重构界面：原生 Fluent
 
 ## 下载与运行
 
-在 [Releases](https://github.com/you20cc/DeltaColorManager/releases) 页面下载最新版压缩包，**解压后**直接运行 `DeltaColorManager.exe`。
+在 [Releases](https://github.com/you20cc/DeltaColorManager.WinUI/releases) 页面下载最新版压缩包，**解压后**直接运行 `DeltaColorManager.exe`。
 
 > **系统要求**：Windows 10 1809+ / 11，64 位
 >
